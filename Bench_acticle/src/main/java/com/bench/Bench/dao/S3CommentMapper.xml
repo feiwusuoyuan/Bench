@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bench.Bench.dao.S3CommentMapper">
+  <resultMap id="BaseResultMap" type="com.bench.bean.S3Comment">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="conent" jdbcType="VARCHAR" property="conent" />
+    <result column="uid" jdbcType="INTEGER" property="uid" />
+    <result column="aid" jdbcType="INTEGER" property="aid" />
+    <result column="isadoption" jdbcType="CHAR" property="isadoption" />
+    <result column="regtime" jdbcType="TIMESTAMP" property="regtime" />
+    <result column="zan" jdbcType="INTEGER" property="zan" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, conent, uid, aid, isadoption, regtime, zan
+  </sql>
+  <select id="selectByExample" parameterType="com.bench.bean.S3CommentExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from s3_comment
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from s3_comment
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from s3_comment
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.bench.bean.S3CommentExample">
+    delete from s3_comment
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.bench.bean.S3Comment">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into s3_comment (conent, uid, aid, 
+      isadoption, regtime, zan
+      )
+    values (#{conent,jdbcType=VARCHAR}, #{uid,jdbcType=INTEGER}, #{aid,jdbcType=INTEGER}, 
+      #{isadoption,jdbcType=CHAR}, #{regtime,jdbcType=TIMESTAMP}, #{zan,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.bench.bean.S3Comment">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into s3_comment
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="conent != null">
+        conent,
+      </if>
+      <if test="uid != null">
+        uid,
+      </if>
+      <if test="aid != null">
+        aid,
+      </if>
+      <if test="isadoption != null">
+        isadoption,
+      </if>
+      <if test="regtime != null">
+        regtime,
+      </if>
+      <if test="zan != null">
+        zan,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="conent != null">
+        #{conent,jdbcType=VARCHAR},
+      </if>
+      <if test="uid != null">
+        #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="aid != null">
+        #{aid,jdbcType=INTEGER},
+      </if>
+      <if test="isadoption != null">
+        #{isadoption,jdbcType=CHAR},
+      </if>
+      <if test="regtime != null">
+        #{regtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="zan != null">
+        #{zan,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.bench.bean.S3CommentExample" resultType="java.lang.Long">
+    select count(*) from s3_comment
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update s3_comment
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.conent != null">
+        conent = #{record.conent,jdbcType=VARCHAR},
+      </if>
+      <if test="record.uid != null">
+        uid = #{record.uid,jdbcType=INTEGER},
+      </if>
+      <if test="record.aid != null">
+        aid = #{record.aid,jdbcType=INTEGER},
+      </if>
+      <if test="record.isadoption != null">
+        isadoption = #{record.isadoption,jdbcType=CHAR},
+      </if>
+      <if test="record.regtime != null">
+        regtime = #{record.regtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.zan != null">
+        zan = #{record.zan,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update s3_comment
+    set id = #{record.id,jdbcType=INTEGER},
+      conent = #{record.conent,jdbcType=VARCHAR},
+      uid = #{record.uid,jdbcType=INTEGER},
+      aid = #{record.aid,jdbcType=INTEGER},
+      isadoption = #{record.isadoption,jdbcType=CHAR},
+      regtime = #{record.regtime,jdbcType=TIMESTAMP},
+      zan = #{record.zan,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.bench.bean.S3Comment">
+    update s3_comment
+    <set>
+      <if test="conent != null">
+        conent = #{conent,jdbcType=VARCHAR},
+      </if>
+      <if test="uid != null">
+        uid = #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="aid != null">
+        aid = #{aid,jdbcType=INTEGER},
+      </if>
+      <if test="isadoption != null">
+        isadoption = #{isadoption,jdbcType=CHAR},
+      </if>
+      <if test="regtime != null">
+        regtime = #{regtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="zan != null">
+        zan = #{zan,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.bench.bean.S3Comment">
+    update s3_comment
+    set conent = #{conent,jdbcType=VARCHAR},
+      uid = #{uid,jdbcType=INTEGER},
+      aid = #{aid,jdbcType=INTEGER},
+      isadoption = #{isadoption,jdbcType=CHAR},
+      regtime = #{regtime,jdbcType=TIMESTAMP},
+      zan = #{zan,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.com">
+<head>
+<meta charset="utf-8">
+<title>帐号设置</title>
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="keywords" content="fly,layui,前端社区">
+<meta name="description"
+	content="Fly社区是模块化前端UI框架Layui的官网社区，致力于为web开发提供强劲动力">
+<link rel="stylesheet" href="../../res/layui/css/layui.css">
+<link rel="stylesheet" href="../../res/css/global.css">
+</head>
+<body>
+
+	<div th:replace="html/user/index::#header"></div>
+
+	<div class="layui-container fly-marginTop fly-user-main" id="add">
+		<ul class="layui-nav layui-nav-tree layui-inline" lay-filter="user" id="add" >
+			<li class="layui-nav-item"><a th:href="userhome"> <i
+					class="layui-icon">&#xe609;</i> 我的主页
+			</a></li>
+			<li class="layui-nav-item"><a th:href="userindex"> <i
+					class="layui-icon">&#xe612;</i> 用户中心
+			</a></li>
+			<li class="layui-nav-item layui-this"><a th:href="userset">
+					<i class="layui-icon">&#xe620;</i> 基本设置
+			</a></li>
+			<li class="layui-nav-item"><a th:href="usermessage"> <i
+					class="layui-icon">&#xe611;</i> 我的消息<span v-if="this.count!=0"
+					style="font-size: 1.2em; color: red;">{{this.count}}</span>
+			</a></li>
+			
+		</ul>
+
+		<div class="site-tree-mobile layui-hide">
+			<i class="layui-icon">&#xe602;</i>
+		</div>
+		<div class="site-mobile-shade"></div>
+
+		<div class="site-tree-mobile layui-hide">
+			<i class="layui-icon">&#xe602;</i>
+		</div>
+		<div class="site-mobile-shade"></div>
+
+
+		<div class="fly-panel fly-panel-user" pad20>
+			<div class="layui-tab layui-tab-brief" lay-filter="user">
+				<ul class="layui-tab-title" id="LAY_mine">
+					<li class="layui-this" lay-id="info">我的资料</li>
+					<li lay-id="avatar">头像</li>
+					<li lay-id="pass">密码</li>
+					<li lay-id="bind" th:if="${user.certificainfo}==null">大V认证</li>
+				</ul>
+				<div class="layui-tab-content" style="padding: 20px 0;">
+					<div class="layui-form layui-form-pane layui-tab-item layui-show">
+						<div id="app">
+							<form method="post" action="update1">
+								<div class="layui-form-item">
+									<label for="L_email" class="layui-form-label" v-model="email">邮箱</label>
+									<div class="layui-input-inline">
+										<input type="text" id="L_email" v-model="email"
+											class="layui-input">
+									</div>
+
+								</div>
+								<div class="layui-form-item">
+									<label for="L_username" class="layui-form-label">昵称</label>
+									<div class="layui-input-inline">
+										<input type="text" id="L_username" v-model="account" value=""
+											class="layui-input">
+									</div>
+								</div>
+								<div class="layui-form-item">
+									<label for="L_city" class="layui-form-label">城市</label>
+									<div class="layui-input-inline">
+										<input type="text" v-model="address" value=""
+											class="layui-input">
+									</div>
+								</div>
+								<div class="layui-form-item layui-form-text">
+									<label for="L_sign" class="layui-form-label">签名</label>
+									<div class="layui-input-block">
+										<textarea placeholder="随便写些什么刷下存在感" id="L_sign"
+											v-model="signature" class="layui-textarea"
+											style="height: 80px;"></textarea>
+									</div>
+								</div>
+								<div class="layui-form-item">
+									<button class="layui-btn" key="set-mine" type="button"
+										@click="save()">确认修改</button>
+								</div>
+							</form>
+						</div>
+					</div>
+
+					<div class="layui-form layui-form-pane layui-tab-item">
+						<form id="img" action="uploadimg" method="post"
+							enctype="multipart/form-data">
+							<div class="layui-form-item">
+								<div class="avatar-add">
+									<p>建议尺寸168*168，支持jpg、png、gif</p>
+									<button type="submit" class="layui-btn upload-img">
+										<i class="layui-icon">&#xe67c;</i>上传头像
+									</button>
+									<input style="display: none" type="file" name="file" id="img">
+									<img th:src="${user.uhead}" onclick="img.click()"> <span
+										class="loading"></span>
+								</div>
+							</div>
+						</form>
+					</div>
+
+					<div class="layui-form layui-form-pane layui-tab-item">
+						<form action="/user/repass" method="post" id="app2">
+							<div class="layui-form-item">
+								<label for="L_nowpass" class="layui-form-label">当前密码</label>
+								<div class="layui-input-inline">
+									<input type="password" id="L_nowpass" v-model="nowpwd"
+										class="layui-input">
+								</div>
+							</div>
+							<div class="layui-form-item">
+								<label for="L_pass" class="layui-form-label">新密码</label>
+								<div class="layui-input-inline">
+									<input type="password" id="L_pass" v-model="pwd"
+										class="layui-input">
+								</div>
+								<div class="layui-form-mid layui-word-aux">6到12个字符</div>
+							</div>
+							<div class="layui-form-item">
+								<label for="L_repass" class="layui-form-label">确认密码</label>
+								<div class="layui-input-inline">
+									<input type="password" id="L_repass" v-model="repwd"
+										class="layui-input">
+								</div>
+							</div>
+							<div class="layui-form-item">
+								<button class="layui-btn" key="set-mine" type="button"
+									@click="savepwd">确认修改</button>
+							</div>
+						</form>
+					</div>
+
+
+					<div class="layui-form layui-form-pane layui-tab-item">
+						<ul class="app-bind" >
+						<li v-if="this.num=='1'">
+						<div class="layui-form-item">
+									<label for="L_city" class="layui-form-label" >认证身份</label>
+									<div class="layui-input-inline">
+										<input  type="text"  value="" v-model="vname"
+											class="layui-input">
+									</div>
+								</div>
+								<div class="layui-form-item">
+									<label for="L_city" class="layui-form-label" >认证时间</label>
+									<div class="layui-input-inline">
+										<input  type="text"  value="" v-model="regtime"
+											class="layui-input">
+									</div>
+								</div>
+								<div class="layui-form-item">
+									<label for="L_city" class="layui-form-label" >认证状态</label>
+									<div class="layui-input-inline">
+										<input  type="text"  value="" v-model="status"
+											class="layui-input">
+									</div>
+								</div>
+						</li>
+							<form v-if="this.num!='1'" method="post" action="" >
+							<div class="layui-form-item">
+									<label for="L_city" class="layui-form-label" >姓名</label>
+									<div class="layui-input-inline">
+										<input placeholder="你的真实姓名" type="text"  value="" v-model="name"
+											class="layui-input">
+									</div>
+								</div>
+								<div class="layui-form-item">
+									<label for="L_city" class="layui-form-label" >认证信息</label>
+									<div class="layui-input-inline">
+										<input placeholder="你的身份" type="text"  value="" v-model="vname"
+											class="layui-input">
+									</div>
+								</div>
+								<div class="layui-form-item layui-form-text">
+									<label for="L_sign" class="layui-form-label">认证说明</label>
+									<div class="layui-input-block">
+										<textarea placeholder="认证说明有助于更快通过审核哦" id="L_sign"
+											 class="layui-textarea"
+											style="height: 80px;" v-model="vinfo"></textarea>
+									</div>
+								</div>
+								<div class="layui-form-item">
+									<button class="layui-btn" key="set-mine" type="button"
+										@click="saveinfo()">提交</button>
+								</div>
+							</form>
+						</ul>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+var vue5=new Vue({
+	   el:"#add",
+	   data:{
+		  count:"",
+		  email:"",
+		  account:"",
+		  address:"",
+		  signature:"",
+		  nowpwd:"",
+		  pwd:"",
+		  repwd:"",
+		  size:"",
+		  vname:"",
+		  vinfo:"",
+		  name:"",
+		  num:"",
+		  regtime:"",
+		  status:""
+	   },
+	   created:function(){
+		   this.query();
+		   this.queryV();
+		   this.querypwd();
+		   this.checkinfo();
+	   },
+	   methods:{
+		   query(){
+			   axios({
+					url:"queryCount",
+					params:{}
+				}).then(res=>{
+					this.count=res.data;
+				}); 
+		   },
+		   queryV(){
+			   axios({
+					url:"selectVinfo",
+					params:{}
+				}).then(res=>{
+					this.num=res.data.code;
+					this.vname=res.data.data.vname;
+					this.regtime=res.data.data.regtime.substring(0,10);
+					this.status=res.data.data.status;
+				}); 
+		   },
+		   checkinfo(){
+			   axios({
+					url:"checkinfo",
+					params:{
+					}
+				}).then(res=>{
+					this.email=res.data.email;
+					this.account=res.data.account;
+					this.address=res.data.address;
+					this.signature=res.data.signature;
+				});
+		   },
+		   querypwd(){
+ 			  axios({
+						url:"repwd",
+						params:{
+						}
+					}).then(res=>{
+						if(res.data.code=="1"){
+							this.size=res.data.data.size;
+							console.info(this.size);
+							console.info(res.data.data.size);
+							console.info(res.data.data.data.pwd);
+							this.nowpwd=res.data.data.data.pwd.substring(0,this.size);
+						}
+					});  
+ 		  },
+ 		  savepwd(){
+ 			  axios({
+						url:"savepwd",
+						params:{
+			        		pwd:this.pwd,
+			        		repwd:this.repwd
+						}
+					}).then(res=>{
+							alert(res.data.msg);
+							location.reload();
+					});  
+ 		  },
+ 		  save(){
+ 			  axios({
+						url:"update1",
+						params:{
+							email:this.email,
+							account:this.account,
+			        		address:this.address,
+			        		signature:this.signature,
+						}
+					}).then(res=>{
+						if(res.data.code=="1"){
+							alert(res.data.msg);
+							location.reload();
+						}
+					});
+ 		  },
+ 		 saveinfo(){
+ 			  axios({
+						url:"insertVinfo",
+						params:{
+							vname:this.vname,
+							vinfo:this.vinfo,
+			        		name:this.name,
+						}
+					}).then(res=>{
+						if(res.data.code=="1"){
+							alert(res.data.msg);
+							location.reload();
+						}
+					});
+ 		  },
+	   }
+});
+</script>
+
+
+	<div th:replace="html/index::#footer"></div>
+
+</body>
+</html>

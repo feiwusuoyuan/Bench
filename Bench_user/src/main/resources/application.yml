@@ -1,0 +1,28 @@
+#  yml不能使用制表符tab 只能用普通空格进行缩进 
+# 设置值使用 :空格(值) 
+server:
+  port:  8003
+  
+# 定义当前服务名
+spring:
+  application:
+    name:  buser
+    
+  datasource:
+    url:  jdbc:mysql://127.0.0.1/s3-bench?useUnicode=true&characterEncoding=UTF-8
+    username:  root
+    password:  a
+    driver-class-name:  com.mysql.jdbc.Driver
+    
+
+
+
+  
+    
+
+
+
+    
+    
+
+

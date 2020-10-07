@@ -1,0 +1,43 @@
+server:
+   port: 8002
+
+# 定义当前服务名
+spring:
+   application:
+      name: bindex
+   datasource:
+      url: jdbc:mysql://127.0.0.1/s3-bench?serverTimezone=UTC&CharacterEncoding=UTF-8&useSSL=false
+      username: root
+      password: a
+      driver-class-name: com.mysql.jdbc.Driver
+   
+   servlet:
+      multipart:
+      #总文件大小
+         max-request-size:  100MB
+      #单文件大小
+         max-file-size:  100MB
+         
+      
+  #邮件发送  YML配置规则：如果某个阶段有重复配置情况，必须合并   
+   mail:
+       #邮箱服务器地址
+      host:  smtp.qq.com
+       #用户名
+      username:  1529072552@qq.com
+       #密码
+      password:  xsuwaxihxxuqijea
+      default-encoding:  UTF-8 
+
+   redis:
+      database:  0
+      host:  127.0.0.1
+      port:  6379
+      password:       
+             
+      
+#用户邮箱自定义配置
+mail:
+   fromMail: 
+      addr:  1529072552@qq.com
+  

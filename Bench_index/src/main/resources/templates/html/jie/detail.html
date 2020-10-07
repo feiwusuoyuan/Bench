@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.com">
+<head>
+<meta charset="utf-8">
+<title th:text="${article.atitle}"></title>
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="keywords" content="fly,layui,前端社区">
+<meta name="description"
+	content="Fly社区是模块化前端UI框架Layui的官网社区，致力于为web开发提供强劲动力">
+<link rel="stylesheet" href="../../res/layui/css/layui.css">
+<link rel="stylesheet" href="../../res/css/global.css">
+<link rel="stylesheet" href="../../editor.md-master/css/editormd.css">
+<link rel="stylesheet"
+	href="../../editor.md-master/examples/css/style.css">
+	
+	
+	
+	<script type="text/javascript"
+	src="../../editor.md-master/examples/js/jquery.min.js"></script>
+
+
+<script type="text/javascript"
+	src="../../editor.md-master/lib/flowchart.min.js"></script>
+<script type="text/javascript"
+	src="../../editor.md-master/lib/jquery.flowchart.min.js"></script>
+	<script type="text/javascript"
+		src="../../editor.md-master/lib/marked.min.js"></script>
+	<script type="text/javascript"
+		src="../../editor.md-master/lib/prettify.min.js"></script>
+	<script type="text/javascript"
+		src="../../editor.md-master/lib/raphael.min.js"></script>
+	<script type="text/javascript"
+		src="../../editor.md-master/lib/underscore.min.js"></script>
+	<script type="text/javascript"
+		src="../../editor.md-master/lib/sequence-diagram.min.js"></script>
+
+	<script type="text/javascript" src="../../editor.md-master/editormd.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<style>
+#dia{
+  padding:0;
+  border:none;
+  box-shadow:0px 1px 3px rgba(0,0,0,0.2);
+  width:60%;
+  border-radius:10px;
+  margin:auto;
+  height:297px;
+}
+#dia .header{
+  padding:10px;
+  color:#fff;
+  border-radius:10px 10px 0 0;
+  background:#50a8fa;
+}
+#dia .content{
+  padding:30px 12px 30px 12px;
+}
+#dia .footer{
+  margin-top:5px;
+  background:#7fc0f1;
+  overflow:hidden;
+  border-radius:0 0 10px 10px;
+  padding-right:20px;
+}
+#dia .footer .ok,.footer .cancel{
+  padding:10px;
+  float:right;
+  cursor:pointer;
+}
+#dia .footer .ok:hover,.footer .cancel:hover{
+  background:#ededed;
+}
+#reply_re{
+margin-bottom:-6px;
+}
+.editormd-tab-head > li:nth-child(2) {
+display:none;
+}
+.editormd-tab-head > li:nth-child(3) {
+display:none;
+}
+.editormd-tab-head > li:nth-child(4) {
+display:none;
+}
+</style>
+	
+	
+</head>
+<body>
+
+	<div class="fly-header layui-bg-black" th:replace="html/index::#header">
+	</div>
+
+	<div class="layui-hide-xs">
+		<div class="fly-panel fly-column">
+			<div class="layui-container">
+				<ul class="layui-clear">
+					<li class="layui-hide-xs"><a href="/">首页</a></li>
+					<li class="layui-this"><a href="">提问</a></li>
+					<li><a href="">分享<span class="layui-badge-dot"></span></a></li>
+					<li><a href="">讨论</a></li>
+					<li><a href="">建议</a></li>
+					<li><a href="">公告</a></li>
+					<li><a href="">动态</a></li>
+					<li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><span
+						class="fly-mid"></span></li>
+
+					<!-- 用户登入后显示 -->
+					<li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a
+						href="">我发表的贴</a></li>
+					<li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><a
+						href="">我收藏的贴</a></li>
+				</ul>
+
+				<div class="fly-column-right layui-hide-xs">
+					<span class="fly-search"><i class="layui-icon"></i></span> <a
+						href="toadd" class="layui-btn">发表新帖</a>
+				</div>
+				<div class="layui-hide-sm layui-show-xs-block"
+					style="margin-top: -10px; padding-bottom: 10px; text-align: center;">
+					<a href="toadd" class="layui-btn">发表新帖</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="layui-container">
+		<div class="layui-row layui-col-space15">
+
+			<div class="layui-col-md8 content detail">
+				<div class="fly-panel detail-box">
+					<h1 th:text="${article.atitle}">Fly Template v3.0，基于 layui
+						的极简社区页面模版</h1>
+					<div class="fly-detail-info">
+						<span class="layui-badge" th:text="${article.status}">已审核</span>
+						<div th:if="${article.isproblem}==1"
+							style="display: inline-block;">
+							<span th:if="${article.solve}==0" class="layui-badge"
+								style="background-color: #999;">未结</span> <span
+								th:if="${article.solve}==1" class="layui-badge"
+								style="background-color: #5FB878;">已结</span>
+						</div>
+
+
+						<div class="fly-admin-box" data-id="123">
+
+							<span class="layui-badge layui-bg-black"
+								th:if="${article.top}==1">置顶</span> <span
+								class="layui-badge layui-bg-red" th:if="${article.boutique}==1">精帖</span>
+							<span class="layui-badge layui-bg-green fly-detail-column">分享</span>
+
+						</div>
+						<span class="iconfont" title="回答">&#xe60c;</i> <span th:text="${countcom}">66</span></a> <i class="iconfont"
+							title="人气">&#xe60b;</i> <span th:text="${article.reder}">99999</span>
+						</span>
+					</div>
+
+
+
+					<div class="detail-about" style="width: 710px; height: 71.69px">
+						<a class="fly-avatar"
+							th:href="'toOther?account='+${article.user.account}"> <img
+							th:src="${article.user.uhead}" alt="贤心">
+						</a>
+						<div class="fly-detail-user">
+							<a href="" class="fly-link"> <cite
+								th:text="${article.user.account}">贤心</cite> <i
+								class="iconfont icon-renzheng"
+								th:if="${article.user.certificainfo}!=null"></i> <i
+								class="layui-badge fly-badge-vip"
+								th:if="${article.user.uviplevel}!=null"
+								th:text="${article.user.uviplevel}">VIP3</i>
+							</a> <span th:text="${#dates.format(article.sendtime,'yyyy-MM-dd')}">2017-11-30</span>
+						</div>
+						<div class="detail-hits" id="LAY_jieAdmin" data-id="123">
+							<div style="display: inline-block;"
+								th:if="${article.money  != null}">
+								悬赏：<span style="padding-right: 10px; color: #FF7200"
+									th:text="${article.money}"> 0</span>积分
+							</div>
+
+							<div id="shoucan" th:if="${ismy !=true} "
+								style="display: inline-block; float: right;">
+
+								<span v-if="this.cos == '1'"
+									class="layui-btn layui-btn-xs jie-admin" type="edit"> <a
+									@click="cancel()">取消收藏</a>
+								</span> <span v-if="this.cos == '0'"
+									class="layui-btn layui-btn-xs jie-admin" type="edit"> <a
+									@click="sc()">收藏此贴</a>
+								</span> <input id="er" th:value="${session.loginUser.account}"
+									style="display: none">
+							</div>
+
+							<script type="text/javascript">
+							var vue=new Vue({
+							el:"#shoucan",
+							data:{
+								cos:"",
+							},
+							 created:function(){
+								 
+								   this.query();
+							 },
+							methods:{
+								sc(){
+									var aid=[[${article.aid}]];
+									var account=document.getElementById("er").value;
+								    axios({
+										url:"collection",
+										params:{
+											aid:aid,
+											account:account
+										}
+									}).then(res=>{
+										location.reload();
+									});
+								},
+								
+								query(){
+									var aid=[[${article.aid}]];
+									var account=document.getElementById("er").value;
+									axios({
+										url:"selectcate",
+										params:{
+											aid:aid,
+											account:account
+										}
+									}).then(res=>{
+									 	if(res.data.code==1){
+											this.cos=1;
+										}
+										else if(res.data.code==0){
+											this.cos=0;
+										}
+									});					
+								},
+							
+								cancel(){
+									var aid=[[${article.aid}]];
+									var account=document.getElementById("er").value;
+									axios({
+										url:"cancelcate",
+										params:{
+											aid:aid,
+											account:account
+										}
+									}).then(res=>{
+									 	if(res.data.code==1){
+											this.cos=0;
+											location.reload();
+										}
+										
+									});			
+								}
+							}
+								
+							});
+							
+							</script>
+
+
+							<span class="layui-btn layui-btn-xs jie-admin" type="edit"
+								th:if="${ismy ==true} "><a>本人发表</a></span>
+						</div>
+
+
+					</div>
+					<div class="detail-body photos" id="article-content">
+						<textarea id="message" name="message"
+							th:text="${article.acontent}">
+                        </textarea>
+					</div>
+					<script type="text/javascript">
+						$(function() {
+							var	testEditor = editormd.markdownToHTML(
+									"article-content", {
+										width : "40%",
+										height : 700,
+										path : "../../editor.md-master/lib/",
+										preview : true,
+										emoji: true,
+										taskList: true,
+					                    tocm: true, // Using [TOCM]
+					                    tex: true,// 开启科学公式TeX语言支持，默认关闭
+
+					                    flowChart: true,//开启流程图支持，默认关闭
+					                    sequenceDiagram: true,//开启时序/序列图支持，默认关闭,
+
+					                    dialogLockScreen : false,//设置弹出层对话框不锁屏，全局通用，默认为true
+					                    dialogShowMask : false,//设置弹出层对话框显示透明遮罩层，全局通用，默认为true
+					                    dialogDraggable : false,//设置弹出层对话框不可拖动，全局通用，默认为true
+					                    dialogMaskOpacity : 0.4, //设置透明遮罩层的透明度，全局通用，默认值为0.1
+					                    dialogMaskBgColor : "#000",//设置透明遮罩层的背景颜色，全局通用，默认为#fff
+
+					                    codeFold: true,
+										watch : true,
+										editor : false,
+									});
+						});
+					</script>
+
+				</div>
+
+				<div class="fly-panel detail-box" id="flyReply">
+					<fieldset class="layui-elem-field layui-field-title"
+						style="text-align: center;">
+						<legend>回帖</legend>
+					</fieldset>
+
+
+					<div id="fina">
+					
+					<div class="layui-form layui-form-pane">
+						<form action="comm" method="post" >
+							<div class="layui-form-item layui-form-text">
+								<a name="comment"></a>
+								<div id="content">
+
+									<textarea name="content" style="height: 150px;">
+										</textarea>
+								</div>
+								<input name="account" th:value="${session.loginUser.account}"
+									style="display: none"> <input name="aid"
+									th:value="${article.aid}" style="display: none;">
+							</div>
+
+							<div class="layui-form-item">
+								<input type="hidden" name="jid" value="123">
+								<button id="pinlun" class="layui-btn" lay-filter="*" lay-submit>提交回复</button>
+							</div>
+						</form>
+						
+					</div>
+					<script type="text/javascript">
+						var editor;
+						$(function() {
+					       editor = editormd("content", {
+					    	    placeholder:"请输入(最多100字)",
+					            width  : "100%",
+					            height : 220,
+					            codeFold :false,
+					            emoji : true,
+			                    codeFold: true,
+					            path   : "../../editor.md-master/lib/",
+					            saveHTMLToTextarea : true, // 保存 HTML 到 Textarea
+					            toolbarAutoFixed:true,//工具栏自动固定定位的开启与禁用
+					            toolbarIcons : function(){
+					            	return ["emoji","code"]
+					            },
+					        });
+					           
+					    });
+						</script>
+						<ul class="jieda"  v-for="(comm,index) in commList" >
+
+							<li ><a ></a>
+								<div class="detail-about detail-about-reply">
+
+									<a class="fly-avatar" href="'toOther?account='+${comm.user.account}"> <img :src="comm.user.uhead" alt=" ">
+									</a>
+									<div class="fly-detail-user">
+										<a href="" class="fly-link"> <cite>{{comm.user.account}}</cite>
+										</a>
+									</div>
+									<div class="detail-hits">
+										<span>{{comm.regtime}}</span>
+									</div>
+								</div>
+								 <i class="iconfont icon-caina" title="最佳答案" v-if="comm.isadoption ==1"></i>
+								<div class="detail-body jieda-body photos">
+									<p>{{comm.conent}}</p>
+								</div>
+								<div class="jieda-reply">
+									<span class="jieda-zan zan" type="zan"> <i
+										class="iconfont icon-zan" @click="zan(comm.id)"></i> <em >{{comm.zan}}</em>
+									</span> 
+									
+									<span type="reply"> <i class="iconfont icon-svgmoban53"></i>
+										<a @click="reply(comm.user.account)" class="reply_btn">回复</a>
+									</span>
+									<div class="jieda-admin">
+										 <span class="jieda-accept" type="accept" th:if="${ispro}==true"><a @click="cn(comm.id)">采纳</a></span>
+									</div>
+								</div>
+								
+								
+								
+								</li>
+							<!-- 无数据时 -->
+                               
+						</ul>
+                         
+                         <dialog id="dia">
+                         <div class="header" v-text="huifu">
+                                             
+                         </div>
+                         
+                         <input th:value="${session.loginUser.account}"  id="useracc" 
+									style="display: none">
+                         
+                         <div class="reply_re" id="reply_re">
+                                <textarea id="whohui" name="reply_re" style="height: 150px;">
+								</textarea>                  
+                         </div>
+                         <script type="text/javascript">
+						var editor;
+						$(function() {
+					       editor = editormd("reply_re", {
+					    	    placeholder:"请输入(最多100字)",
+					            width  : "100%",
+					            height : 220,
+					            codeFold :false,
+					            emoji : true,
+			                    codeFold: true,
+					            path   : "../../editor.md-master/lib/",
+					            saveHTMLToTextarea : true, // 保存 HTML 到 Textarea
+					            toolbarAutoFixed:true,//工具栏自动固定定位的开启与禁用
+					            toolbarIcons : function(){
+					            	return ["emoji","code"]
+					            },
+					        });
+					           
+					    });
+						</script>
+                         
+                         
+                         <div class="footer">
+                         <button class="ok" @click="fab()">
+                                             确定
+                         </button>
+                         <button class="cancel">
+                                             取消
+                         </button>
+                         </div>
+                         </dialog>
+                         
+					</div>
+					<script type="text/javascript">
+					var cm=new Vue({
+						el:"#fina",
+						data:{	
+							huifu:"",
+							commList:[],
+							aid:[[${article.aid}]],
+							account:"",	
+						},
+	                     created:function(){
+	                    	 axios.get("cL?aid="+this.aid
+	                    	 ).then(res=>{
+	           					this.commList = res.data.data;
+	           				});
+	                    	
+	                     },
+						methods:{
+							reply(type){
+								this.account=type;
+								this.huifu="@"+this.account+"---温馨提示初次加载请点击表情（样式bug）";
+								var dialog = document.getElementById("dia");
+								
+								 dialog.showModal();
+								 document.querySelector(".cancel").addEventListener("click",function(){
+									  dialog.close();
+								});
+							},
+							
+							fab(){
+								var Faccount=document.getElementById("useracc").value;
+								var whohui=document.getElementById("whohui").value;
+								axios({
+									url:"recomm",
+									params:{
+										aid:this.aid,
+										account:Faccount,
+										content:"@"+this.account+"："+whohui,
+										who:this.account
+									}
+								}).then(res=>{
+									
+									 var dialog1 = document.getElementById("dia");
+									dialog1.close(); 
+									location.reload();
+								});	
+								
+							
+							},
+							zan(type){
+								
+								var cid=type;
+								axios({
+									url:"zok",
+									params:{
+                                        id:cid   
+									}
+								}).then(res=>{
+									if(res.data.code==1){
+										alert("点赞成功");
+										location.reload();
+									}else if(res.data.code==0){
+										alert("取消点赞");
+										location.reload();
+									}
+									
+								});	
+							},
+							
+							cn(type){
+								var cid=type;
+								
+								axios({
+									url:"cn",
+									params:{
+										aid:this.aid,
+                                        id:cid   
+									}
+								}).then(res=>{
+									if(res.data.code==1){
+										location.reload();	
+									}
+									else{
+										alert("已采纳");
+									}
+									
+								});	
+							}
+						}
+	                     });
+                  </script>
+
+                
+
+
+					
+					
+					
+				</div>
+			</div>
+			
+			<div class="layui-col-md4">
+
+				<dl class="fly-panel fly-list-one">
+					<dt class="fly-panel-title">热议榜</dt>
+					<dd th:each="l3:${list3}">
+						<a th:href="'todetail?aid='+${l3.aid}" th:text="${l3.atitle}">基于
+							layui 的极简社区页面模版</a> <span><i class="iconfont icon-pinglun1"></i>
+							[[${l3.reply}]]</span>
+					</dd>
+				</dl>
+
+
+				<div class="fly-panel">
+					<div class="fly-panel-main">
+						<a th:if="${announ}!=null" th:href="${announ.url}" target="_blank">
+							<img th:src="${announ.conent}"
+							style="width: 350px; height: 550px;">
+						</a>
+						<h2 th:if="${announ}==null">
+							<a>广告位招租</a>
+						</h2>
+					</div>
+				</div>
+
+
+				<div class="fly-panel" style="padding: 20px 0; text-align: center;">
+					<img src="../../res/images/weixin.jpg" style="max-width: 100%;"
+						alt="layui">
+					<p style="position: relative; color: #666;">微信扫码关注 layui 公众号</p>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<div class="fly-footer">
+		<p>
+			<a href="http://fly.layui.com/" target="_blank">Fly社区</a> 2017 &copy;
+			<a href="http://www.layui.com/" target="_blank">layui.com 出品</a>
+		</p>
+		<p>
+			<a href="http://fly.layui.com/jie/3147/" target="_blank">付费计划</a> <a
+				href="http://www.layui.com/template/fly/" target="_blank">获取Fly社区模版</a>
+			<a href="http://fly.layui.com/jie/2461/" target="_blank">微信公众号</a>
+		</p>
+	</div>
+	
+   
+   
+<script type="text/javascript">
+    var btn = document.getElementById("pinlun");
+    btn.onclick =function(){
+        alert("评论成功！");
+    }
+</script> 
+	<script src="../../res/layui/layui.js"></script>
+	<script>
+		layui.cache.page = 'jie';
+		layui.config({
+			version : "3.0.0",
+			base : '../../res/mods/'
+		}).extend({
+			fly : 'index'
+		}).use([ 'fly', 'face' ], function() {
+			var $ = layui.$, fly = layui.fly;
+
+		  /*  $('.detail-body').each(function() {
+				var othis = $(this), html = othis.html();
+				othis.html(fly.content(html));
+			});  */
+
+		});
+	</script>
+
+
+
+
+
+</body>
+</html>

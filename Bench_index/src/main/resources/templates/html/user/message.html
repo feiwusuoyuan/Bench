@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.com">
+<head>
+  <meta charset="utf-8">
+  <title>我的消息</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="keywords" content="fly,layui,前端社区">
+  <meta name="description" content="Fly社区是模块化前端UI框架Layui的官网社区，致力于为web开发提供强劲动力">
+  <link rel="stylesheet" href="../../res/layui/css/layui.css">
+  <link rel="stylesheet" href="../../res/css/global.css">
+</head>
+<body>
+
+<div th:replace="html/user/index::#header"></div>
+
+<div class="layui-container fly-marginTop fly-user-main" id="add">
+  <ul class="layui-nav layui-nav-tree layui-inline" lay-filter="user">
+    <li class="layui-nav-item">
+      <a th:href="userhome">
+        <i class="layui-icon">&#xe609;</i>
+        我的主页
+      </a>
+    </li>
+    <li class="layui-nav-item">
+      <a th:href="userindex">
+        <i class="layui-icon">&#xe612;</i>
+        用户中心
+      </a>
+    </li>
+    <li class="layui-nav-item">
+      <a th:href="userset">
+        <i class="layui-icon">&#xe620;</i>
+        基本设置
+      </a>
+    </li>
+    <li class="layui-nav-item layui-this">
+      <a th:href="usermessage">
+        <i class="layui-icon">&#xe611;</i>
+        我的消息 <span v-if="this.count!=0" style="font-size: 1.2em;color: red;">{{this.count}}</span>
+      </a>
+    </li>
+  </ul>
+
+  <div class="site-tree-mobile layui-hide">
+    <i class="layui-icon">&#xe602;</i>
+  </div>
+  <div class="site-mobile-shade"></div>
+  
+  <div class="site-tree-mobile layui-hide">
+    <i class="layui-icon">&#xe602;</i>
+  </div>
+  <div class="site-mobile-shade"></div>
+  
+  
+  <div class="fly-panel fly-panel-user" pad20 >
+	  <div class="layui-tab layui-tab-brief" lay-filter="user" id="LAY_msg" style="margin-top: 15px;">
+	  <span style="font-size: 1.2em">你有<span style="color: red">{{this.count}}</span>条消息未读</span><br><br>
+	    <button class="layui-btn layui-btn-danger" id="LAY_delallmsg" type="button" @click="delAll">清空全部消息</button>
+	     <button class="layui-btn layui-btn-danger" id="LAY_delallmsg" type="button" @click="changeAll">一键全读</button>
+	    <div  id="LAY_minemsg" style="margin-top: 10px;">
+        <div v-if="this.count==0" class="fly-none">您暂时没有最新消息</div><br><br><br>
+        <ul class="mine-msg">
+          <!-- <li data-id="123">
+            <blockquote class="layui-elem-quote">
+              <a href="/jump?username=Absolutely" target="_blank"><cite>Absolutely</cite></a>回答了您的求解<a target="_blank" href="/jie/8153.html/page/0/#item-1489505778669"><cite>layui后台框架</cite></a>
+            </blockquote>
+            <p><button class="layui-btn layui-btn-danger" type="button">删除</button>
+            <button class="layui-btn layui-btn-danger" type="button"  >已读</button></p>
+          </li> -->
+          <li data-id="123" v-for="m in msg">
+            <blockquote class="layui-elem-quote">
+              <span>{{m.author}}</span>：<span>{{m.msg}}</span>
+              &nbsp; &nbsp; &nbsp; &nbsp;<a v-if="m.url!=null" :href="m.url">点此前往</a>
+            </blockquote><!-- th:text="${#dates.format(s.regtime,'yyyy-MM-dd')}" -->
+            <p><span >{{m.regtime.substring(0,10)}}</span>
+            <button class="layui-btn layui-btn-danger" type="button"  @click="del(m.id)">删除</button>
+            <button v-if="m.isread=='0'" class="layui-btn layui-btn-danger" type="button"  @click="red(m.id)">未读</button></p>
+            
+          </li>
+        </ul>
+      </div>
+	  </div>
+	</div>
+
+</div>
+<script type="text/javascript" >
+   var vue=new Vue({
+	   el:"#add",
+	   data:{
+		  msg:[] ,
+		  count:""
+	   },
+	   created:function(){
+		   this.query();
+		   axios({
+				url:"findmsg",
+				params:{
+				}
+			}).then(res=>{
+				this.msg=res.data;
+			});
+	   },
+	   methods:{
+		   query(){
+			   axios({
+					url:"queryCount",
+					params:{}
+				}).then(res=>{
+					this.count=res.data;
+					console.info(this.count);
+				}); 
+		   },
+		   del(num){
+			   axios({
+					url:"delmsg",
+					params:{
+		        		id:num
+					}
+				}).then(res=>{
+					alert(res.data);
+					location.reload();
+				});
+		   },
+		   delAll(){
+			   axios({
+					url:"delAllmsg",
+					params:{
+					}
+				}).then(res=>{
+					location.reload();
+				});
+		   },
+		   changeAll(){
+			   axios({
+					url:"updataAllmsg",
+					params:{
+					}
+				}).then(res=>{
+					location.reload();
+				}); 
+		   },
+		   red(num){
+			   axios({
+					url:"updatamsg",
+					params:{
+		        		id:num
+					}
+				}).then(res=>{
+					location.reload();
+				}); 
+		   },
+	   }
+   });
+
+</script>
+<div th:replace="html/index::#footer"></div>
+
+</body>
+</html>

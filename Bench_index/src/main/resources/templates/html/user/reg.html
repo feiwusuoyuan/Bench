@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.com">
+<head>
+  <meta charset="utf-8">
+  <title>注册</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="keywords" content="fly,layui,前端社区">
+  <meta name="description" content="Fly社区是模块化前端UI框架Layui的官网社区，致力于为web开发提供强劲动力">
+  <link rel="stylesheet" href="../../res/layui/css/layui.css">
+  <link rel="stylesheet" href="../../res/css/global.css">
+  <script type="text/javascript" ></script>
+</head>
+<style type="text/css">
+#b1 {
+    color: #444444;
+    background: #F3F3F3;
+    border: 1px #DADADA solid;
+    padding: 5px 10px;
+    border-radius: 2px;
+    font-weight: bold;
+    font-size: 10pt;
+    outline: none;
+    position: relative;
+    bottom: 5px
+}
+#err{
+color: red
+}
+</style>
+<body>
+
+<div class="fly-header layui-bg-black" th:replace="html/index::#header">
+  
+</div>
+
+<div class="layui-container fly-marginTop">
+  <div class="fly-panel fly-panel-user" pad20>
+    <div class="layui-tab layui-tab-brief" lay-filter="user">
+      <ul class="layui-tab-title">
+        <li><a href="login">登入</a></li>
+        <li class="layui-this">注册</li>
+      </ul>
+      <div class="layui-form layui-tab-content" id="LAY_ucm" style="padding: 20px 0;">
+        <div class="layui-tab-item layui-show">
+          <div class="layui-form layui-form-pane" id="app">
+            <form method="post" action="/register" enctype="multipart/form-data">
+              <span id="err" style="font-size: 1.2em" th:each="e:${errors}" th:if="${e.field=='account'}" th:text="${e.defaultMessage}"></span>
+              <div class="layui-form-item">
+                <label for="L_username" class="layui-form-label" style="margin-top: 10px">昵称</label>
+                <div class="layui-input-inline">
+                  <input th:value="${user}!=null?${user.account}:''" type="text"  name="account"  autocomplete="off" class="layui-input" style="margin-top: 10px">
+                </div>
+              </div>
+              <span id="err" style="font-size: 1.2em" th:each="e:${errors}" th:if="${e.field=='pwd'}" th:text="${e.defaultMessage}"></span>
+              <div class="layui-form-item">
+                <label for="L_pass" class="layui-form-label" style="margin-top: 10px">密码</label>
+                <div class="layui-input-inline">
+                  <input type="password" th:value="${user}!=null?${user.pwd}:''" name="pwd"  autocomplete="off" class="layui-input" style="margin-top: 10px">
+                </div>
+              </div>
+              <span id="err" style="font-size: 1.2em" th:each="e:${errors}" th:if="${e.field=='repwd'}" th:text="${e.defaultMessage}"></span>
+              <div class="layui-form-item">
+                <label for="L_repass" class="layui-form-label" style="margin-top: 10px">确认密码</label>
+                <div class="layui-input-inline">
+                  <input type="password"  name="repwd"  th:value="${user}!=null?${user.repwd}:''" class="layui-input" style="margin-top: 10px">
+                </div>
+              </div>
+              <span id="err" style="font-size: 1.2em" th:each="e:${errors}" th:if="${e.field=='email'}" th:text="${e.defaultMessage}"></span>
+              <div class="layui-form-item">
+                <label for="L_email" class="layui-form-label" style="margin-top: 10px">邮箱</label>
+                <div class="layui-input-inline">
+                  <input v-model="email" th:value="${user}!=null?${user.email}:''" type="text" name="email"  autocomplete="off" class="layui-input" style="margin-top: 10px">
+                </div>
+               <!--  <div class="layui-form-mid layui-word-aux"><button id="b1" type="button" @click="sendVcode" style="margin-top: 10px">发送验证码</button></div> -->
+              </div>
+              <!-- <span id="err" style="font-size: 1.2em" th:each="e:${errors}" th:if="${e.field=='vercode'}" th:text="${e.defaultMessage}"></span>
+              <div class="layui-form-item">
+                <label for="L_vercode" class="layui-form-label" style="margin-top: 10px">邮箱验证</label>
+                <div class="layui-input-inline">
+                  <input type="text"  name="vercode" th:value="${user}!=null?${user.vercode}:''" placeholder="输入验证码" autocomplete="off" class="layui-input" style="margin-top: 10px">
+                </div>
+              </div> -->
+              <span id="err" style="font-size: 1.2em" th:each="e:${errors}" th:if="${e.field=='phone'}" th:text="${e.defaultMessage}"></span>
+              <div class="layui-form-item">
+                <label class="layui-form-label" style="margin-top: 10px">手机号</label>
+                <div class="layui-input-inline">
+                  <input type="text"  name="phone"  th:value="${user}!=null?${user.phone}:''"  class="layui-input" style="margin-top: 10px">
+                </div>
+              </div>
+              <div class="layui-form-item">
+                <button class="layui-btn"  type="submit">立即注册</button>
+              </div>
+               
+              <div class="layui-form-item fly-form-app">
+                <span>或者直接使用社交账号快捷注册</span>
+                <a href="" onclick="layer.msg('正在通过QQ登入', {icon:16, shade: 0.1, time:0})" class="iconfont icon-qq" title="QQ登入"></a>
+                <a href="" onclick="layer.msg('正在通过微博登入', {icon:16, shade: 0.1, time:0})" class="iconfont icon-weibo" title="微博登入"></a>
+              </div>
+            </form>
+          </div>
+          <script type="text/javascript">
+          var vue=new Vue({
+        	  el:"#app",
+        	  data:{
+        		 email:"", 
+        	  },
+        	  created:function(){
+        		  
+        	  },
+        	  methods:{
+        		  sendVcode(){
+        			  axios({
+							url:"sendemail",
+							params:{
+								email:this.email
+							}
+						}).then(res=>{
+							if(res.data.code=="1"){
+								alert(res.data.msg);
+							}
+						});
+        		  },
+        	  }
+          });
+          
+          
+          </script>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<div th:replace="html/index::#footer">
+
+
+</div>
+</body>
+</html>

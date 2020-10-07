@@ -1,0 +1,15 @@
+server:
+  port: 8004
+  
+# 定义当前服务名
+spring:
+  application:
+    name:  barticle
+    
+  datasource:
+    url: jdbc:mysql://127.0.0.1/s3-bench?useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password: a
+    driver-class-name: com.mysql.jdbc.Driver
+    
+

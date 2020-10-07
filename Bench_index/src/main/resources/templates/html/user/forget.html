@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.com">
+
+<head>
+<meta charset="utf-8">
+<title>找回密码/重置密码</title>
+<link rel="stylesheet" href="../../res/layui/css/layui.css">
+<link rel="stylesheet" href="../../res/css/global.css">
+</head>
+<body>
+
+	<div class="fly-header layui-bg-black" th:replace="html/index::#header">
+
+	</div>
+	<div class="layui-container fly-marginTop">
+	<div class="fly-panel fly-panel-user" pad20>
+	<div class="layui-tab layui-tab-brief" lay-filter="user">
+	 <ul class="layui-tab-title">
+        <li class="layui-this">邮箱验证</li>
+        <li ><a href="phoneforget">手机验证</a></li>
+      </ul>
+	
+	<div class="layui-container fly-marginTop fly-user-main" id="add">
+		<div class="fly-panel fly-panel-user" pad20>
+			<div class="layui-tab layui-tab-brief" lay-filter="user" id="LAY_msg"
+				style="margin-top: 15px;">
+				<div id="LAY_minemsg" style="margin-top: 10px;">
+					<ul class="mine-msg" style="position: relative;right: 240px">
+              <li>
+              <div >
+                <label  class="layui-form-label">邮箱</label>
+                <div class="layui-input-inline">
+                  <input v-model="email"  type="text"   class="layui-input">
+                </div>
+              </div>
+              </li>
+              <li>
+              <div >
+                <label  class="layui-form-label">邮箱验证码</label>
+                <div class="layui-input-inline">
+                  <input v-model="vercode" type="text"   class="layui-input">
+                </div>
+              </div>
+              <li>
+              <div >
+                <label  class="layui-form-label">密码</label>
+                <div class="layui-input-inline">
+                  <input v-model="pwd" type="password"   class="layui-input">
+                </div>
+              </div>
+              <li>
+              <div >
+                <label  class="layui-form-label">确认密码</label>
+                <div class="layui-input-inline">
+                  <input v-model="repwd" type="password"   class="layui-input">
+                </div>
+              </div>
+              </li>
+				<li style="position: relative;left: 110px">
+				  <button class="layui-btn" type="button" 
+				      @click="sendEmail">发送验证码</button>
+				<button class="layui-btn"
+						type="button" @click="save()">提交</button>
+						</li>
+					</ul>
+	</div>
+	</div>
+	</div>
+	</div>
+<script type="text/javascript">
+var vue=new Vue({
+	el:"#add",
+	data:{
+		email:"",
+		vercode:"",
+		pwd:"",
+		repwd:""
+	},
+	created:function(){
+		
+	},
+	methods:{
+		sendEmail(){
+			axios({
+				url:"Sendemail",
+				params:{
+					email:this.email
+				}
+			}).then(res=>{
+				alert(res.data.msg);
+			});
+		},
+		save(){
+			axios({
+				url:"checkVcode",
+				params:{
+					vercode:this.vercode,
+					pwd:this.pwd,
+					repwd:this.repwd,
+					email:this.email
+				}
+			}).then(res=>{
+				if(res.data.code==0){
+					alert(res.data.msg);
+				}else if(res.data.code==1){
+					alert(res.data.msg);
+					location.href="login";
+				}
+			});
+		},
+	}
+});
+</script>
+
+<div th:replace="html/index::#footer"></div>
+</body>
+</html>
